@@ -8,9 +8,11 @@ The PCB design was heavily inspired by and drawn from [SuperSpongo's DIY adapter
 
 ## Assembly
 
-This project requires an Arduino Nano (though I believe any Arduino running at 5V/16MHz should work) and a boost converter (the N64 provides 3.3V and we need 5V to power the Gamecube controller). You'll also need a 1KΩ resistor (R4 on the schematic), two 22Ω resistors (R1 and R3), a 220Ω resistor (R2), an LED (D1), a male N64 controller port / cable, and a female Gamecube port / cable.
+This project requires an Arduino Nano (though I believe any Arduino running at 5V/16MHz should work) and a DC-DC 2V-24V to 5V-28V step-up converter (the N64 provides 3.3V and we need 5V to power the Gamecube controller). You'll also need a 1KΩ resistor (R4 on the schematic), two 22Ω resistors (R1 and R3), a 220Ω resistor (R2), an LED (D1), a male N64 controller port / cable, and a female Gamecube port / cable.
 
 (Note: If you want to modify the KiCad files, you'll need the schematic and footprint files for the boost converter found [here](kicad/gc_2_n64/boost-converter-files)).
+
+The step-up converter needs to be calibrated to output exactly 5V when receiving 3.3V. You can do this by connecting it to a 3.3V source, such as the N64, then turning the screw on the side until the output is correct.
 
 When soldering the wires from the Gamecube in and N64 out, follow the labels in this image:
 
