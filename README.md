@@ -4,7 +4,7 @@ PCB and custom firmware for a gamecube to N64 controller adapter. The firmware i
 
 I have also included a file (index.html) that allows users to generate custom button mappings locally. Download the file and run it in a web browser to use it.
 
-The PCB design was heavily inspired by and drawn from [SuperSpongo's DIY adapter design](https://circuit-board.de/forum/index.php/Thread/28130-Raphnets-GameCube-Controller-to-N64-Adapter-v2/). And as mentioned before, the credit for 99% of the ideas and code goes to Raphnet, Zenith Labs, and SuperSpongo. 
+The PCB design was heavily inspired by and drawn from [SuperSpongo's DIY adapter design](https://circuit-board.de/forum/index.php/Thread/28130-Raphnets-GameCube-Controller-to-N64-Adapter-v2/). And as mentioned before, the credit for 99% of the ideas and code goes to Raphnet, Zenith Labs, and SuperSpongo. Because I modified firmware licensed under the GPLv3 License, the code in src/ is licensed under the GPLv3 License. The PCB is licensed under the MIT license.
 
 # Instructions
 
