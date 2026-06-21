@@ -2,7 +2,7 @@
 
 PCB and custom firmware for a gamecube to N64 controller adapter. The firmware is an updated version of [Raphaël Assenat's](https://github.com/raphnet)'s v2.1 gc_to_n64 software ([here](https://www.raphnet.net/electronique/gc_to_n64/index_en.php), see also [here](https://github.com/raphnet/gc_to_n64)). It implements two major new features: an input viewer (from the USB port on the Arduino, compatible with RetroSpy) and a notch calibrator (heavily adapted from [Zenith Labs' algorithm](https://github.com/ZenithControlLabs/Zenith_FW)). It also allows many more degrees of flexibility when configuring soft triggers -- triggers can be mapped at 5% press, 10% press, 15% press, and so on until 100%. 
 
-I have also included a file (index.html) that allows users to generate custom button mappings locally. Download the file and run it in a web browser to use it.
+I have also included a file ([generate-button-map.html](generate-button-map.html)) that allows users to generate custom button mappings locally. Download the file and run it in a web browser to use it.
 
 The PCB design was heavily inspired by and drawn from [SuperSpongo's DIY adapter design](https://circuit-board.de/forum/index.php/Thread/28130-Raphnets-GameCube-Controller-to-N64-Adapter-v2/). And as mentioned before, the credit for 99% of the ideas and code goes to Raphnet, Zenith Labs, and SuperSpongo. Because I modified firmware licensed under the GPLv3 License, the code in src/ is licensed under the GPLv3 License. The PCB is licensed under the MIT license.
 
