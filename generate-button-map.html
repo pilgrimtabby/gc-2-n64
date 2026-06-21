@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GC to N64 Multi-Button Mapper</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; background: #f4f4f9; color: #333; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        label { display: block; font-weight: bold; margin-bottom: 5px; margin-top: 15px; }
+        select { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; font-size: 16px; background: #fff; }
+        button { margin-top: 15px; width: 100%; padding: 10px; background: #0056b3; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        button:hover { background: #004494; }
+        .btn-remove { background: #d9534f; margin-top: 0; padding: 6px 12px; width: auto; font-size: 14px; }
+        .btn-remove:hover { background: #c9302c; }
+        ul { list-style-type: none; padding: 0; }
+        li { background: #e9ecef; margin-top: 10px; padding: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+        .result { margin-top: 20px; padding: 15px; background: #222; color: #fff; border-radius: 4px; font-family: monospace; font-size: 18px; text-align: center; word-wrap: break-word; line-height: 1.6; }
+        .sep { color: #ffeb3b; }
+        .term { color: #ff5722; }
+        .empty-state { text-align: center; color: #777; font-style: italic; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>GC to N64 Batch Mapper</h2>
+        
+        <label for="gc-input">1. Gamecube Input (Source)</label>
+        <select id="gc-input"></select>
+
+        <label for="n64-output">2. N64 Output (Target)</label>
+        <select id="n64-output"></select>
+
+        <button onclick="addMapping()">Add to Sequence</button>
+
+        <h3 style="margin-top: 30px; border-bottom: 1px solid #ddd; padding-bottom: 5px;">Queued Mappings</h3>
+        <ul id="mapping-list">
+            <div class="empty-state">No mappings added yet.</div>
+        </ul>
+
+        <h3 style="margin-top: 30px; border-bottom: 1px solid #ddd; padding-bottom: 5px;">Final Sequence</h3>
+        <div id="output" class="result">Sequence will appear here</div>
+    </div>
+
+    <script>
+const inputs = [
+    { id: 0, name: "A Button" }, { id: 1, name: "B Button" }, { id: 2, name: "Z Button" },
+    { id: 3, name: "Start Button" }, 
+    { id: 4, name: "L Trigger (Digital Click)" }, { id: 5, name: "R Trigger (Digital Click)" },
+    { id: 6, name: "C-Stick Up" }, { id: 7, name: "C-Stick Down" }, { id: 8, name: "C-Stick Left" },
+    { id: 9, name: "C-Stick Right" }, { id: 10, name: "D-Pad Up" }, { id: 11, name: "D-Pad Down" },
+    { id: 12, name: "D-Pad Left" }, { id: 13, name: "D-Pad Right" }, { id: 14, name: "Main Stick X-Axis" },
+    { id: 15, name: "Main Stick Y-Axis" }, { id: 16, name: "X Button" }, { id: 17, name: "Y Button" },
+    
+    { id: 18, name: "Main Stick Up" }, { id: 19, name: "Main Stick Down" }, 
+    { id: 20, name: "Main Stick Left" }, { id: 21, name: "Main Stick Right" },
+    { id: 22, name: "C-Stick X-Axis" }, { id: 23, name: "C-Stick Y-Axis" },
+
+    { id: 24, name: "L Analog (5%)" }, { id: 25, name: "L Analog (10%)" },
+    { id: 26, name: "L Analog (15%)" }, { id: 27, name: "L Analog (20%)" }, { id: 28, name: "L Analog (25%)" },
+    { id: 29, name: "L Analog (30%)" }, { id: 30, name: "L Analog (35%)" }, { id: 31, name: "L Analog (40%)" },
+    { id: 32, name: "L Analog (45%)" }, { id: 33, name: "L Analog (50%)" }, { id: 34, name: "L Analog (55%)" },
+    { id: 35, name: "L Analog (60%)" }, { id: 36, name: "L Analog (65%)" }, { id: 37, name: "L Analog (70%)" },
+    { id: 38, name: "L Analog (75%)" }, { id: 39, name: "L Analog (80%)" }, { id: 40, name: "L Analog (85%)" },
+    { id: 41, name: "L Analog (90%)" }, { id: 42, name: "L Analog (95%)" }, { id: 43, name: "L Analog (100%)" },
+    { id: 44, name: "R Analog (5%)" }, { id: 45, name: "R Analog (10%)" },
+    { id: 46, name: "R Analog (15%)" }, { id: 47, name: "R Analog (20%)" }, { id: 48, name: "R Analog (25%)" },
+    { id: 49, name: "R Analog (30%)" }, { id: 50, name: "R Analog (35%)" }, { id: 51, name: "R Analog (40%)" },
+    { id: 52, name: "R Analog (45%)" }, { id: 53, name: "R Analog (50%)" }, { id: 54, name: "R Analog (55%)" },
+    { id: 55, name: "R Analog (60%)" }, { id: 56, name: "R Analog (65%)" }, { id: 57, name: "R Analog (70%)" },
+    { id: 58, name: "R Analog (75%)" }, { id: 59, name: "R Analog (80%)" }, { id: 60, name: "R Analog (85%)" },
+    { id: 61, name: "R Analog (90%)" }, { id: 62, name: "R Analog (95%)" }, { id: 63, name: "R Analog (100%)" }
+];
+        const outputs = [
+            { id: 0, name: "A Button" }, { id: 1, name: "B Button" }, { id: 2, name: "Z Button" },
+            { id: 3, name: "Start Button" }, { id: 4, name: "L Trigger" }, { id: 5, name: "R Trigger" },
+            { id: 6, name: "C-Up" }, { id: 7, name: "C-Down" }, { id: 8, name: "C-Left" },
+            { id: 9, name: "C-Right" }, { id: 10, name: "D-Pad Up" }, { id: 11, name: "D-Pad Down" },
+            { id: 12, name: "D-Pad Left" }, { id: 13, name: "D-Pad Right" }, { id: 14, name: "Stick X-Axis" },
+            { id: 15, name: "Stick Y-Axis" }, { id: 20, name: "None (Unmapped)" }
+        ];
+
+        let queuedMappings = [];
+
+        function populateSelect(elementId, options) {
+            const select = document.getElementById(elementId);
+            options.forEach(opt => {
+                const option = document.createElement("option");
+                option.value = opt.id;
+                option.textContent = `[ID: ${opt.id}] ${opt.name}`;
+                select.appendChild(option);
+            });
+        }
+
+        function toBase4Sequence(id) {
+            if (id === 0) return ["A"];
+            let seq = [];
+            let temp = id;
+            while (temp > 0) {
+                let rem = temp % 4;
+                if (rem === 0) seq.push("A");
+                else if (rem === 1) seq.push("B");
+                else if (rem === 2) seq.push("X");
+                else if (rem === 3) seq.push("Y");
+                temp = Math.floor(temp / 4);
+            }
+            return seq.reverse();
+        }
+
+        function addMapping() {
+            const inSelect = document.getElementById("gc-input");
+            const outSelect = document.getElementById("n64-output");
+            
+            queuedMappings.push({
+                inId: parseInt(inSelect.value),
+                inName: inSelect.options[inSelect.selectedIndex].text,
+                outId: parseInt(outSelect.value),
+                outName: outSelect.options[outSelect.selectedIndex].text
+            });
+            
+            renderUI();
+        }
+
+        function removeMapping(index) {
+            queuedMappings.splice(index, 1);
+            renderUI();
+        }
+
+        function renderUI() {
+            const listEl = document.getElementById("mapping-list");
+            const outEl = document.getElementById("output");
+            
+            listEl.innerHTML = "";
+            
+            if (queuedMappings.length === 0) {
+                listEl.innerHTML = '<div class="empty-state">No mappings added yet.</div>';
+                outEl.innerHTML = "Sequence will appear here";
+                return;
+            }
+
+            let fullSequence = [];
+
+            queuedMappings.forEach((map, index) => {
+                // Build UI List
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <span>${map.inName} &rarr; ${map.outName}</span>
+                    <button class="btn-remove" onclick="removeMapping(${index})">Remove</button>
+                `;
+                listEl.appendChild(li);
+
+                // Build Base-4 Code
+                const inSeq = toBase4Sequence(map.inId).join(" &rarr; ");
+                const outSeq = toBase4Sequence(map.outId).join(" &rarr; ");
+                const chunk = `${inSeq} <span class="sep">&rarr; Z &rarr;</span> ${outSeq} <span class="term">&rarr; L</span>`;
+                fullSequence.push(chunk);
+            });
+
+            outEl.innerHTML = fullSequence.join(" <br><br> ");
+        }
+
+        populateSelect("gc-input", inputs);
+        populateSelect("n64-output", outputs);
+    </script>
+</body>
+</html>
