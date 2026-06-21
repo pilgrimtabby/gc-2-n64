@@ -1,8 +1,10 @@
 # gc-2-n64
 
-PCB for a gamecube to N64 controller adapter using [Raphaël Assenat](https://github.com/raphnet)'s v2.1 gc_to_n64 software ([here](https://www.raphnet.net/electronique/gc_to_n64/index_en.php), see also [here](https://github.com/raphnet/gc_to_n64])).
+PCB and custom firmware for a gamecube to N64 controller adapter. The firmware is an updated version of [Raphaël Assenat's](https://github.com/raphnet)'s v2.1 gc_to_n64 software ([here](https://www.raphnet.net/electronique/gc_to_n64/index_en.php), see also [here](https://github.com/raphnet/gc_to_n64)). It implements two major new features: an input viewer (from the USB port on the Arduino, compatible with RetroSpy) and a notch calibrator (heavily adapted from [Zenith Labs' algorithm](https://github.com/ZenithControlLabs/Zenith_FW)). It also allows many more degrees of flexibility when configuring soft triggers -- triggers can be mapped at 5% press, 10% press, 15% press, and so on until 100%. 
 
-The PCB design was heavily inspired by and drawn from [SuperSpongo's DIY adapter design](https://circuit-board.de/forum/index.php/Thread/28130-Raphnets-GameCube-Controller-to-N64-Adapter-v2/).
+I have also included a file (index.html) that allows users to generate custom button mappings locally. Download the file and run it in a web browser to use it.
+
+The PCB design was heavily inspired by and drawn from [SuperSpongo's DIY adapter design](https://circuit-board.de/forum/index.php/Thread/28130-Raphnets-GameCube-Controller-to-N64-Adapter-v2/). And as mentioned before, the credit for 99% of the ideas and code goes to Raphnet, Zenith Labs, and SuperSpongo. 
 
 # Instructions
 
@@ -38,12 +40,14 @@ Final product:
 
 ## Flashing
 
-To flash the Arduino, you will need [avrdude](https://github.com/avrdudes/avrdude). I successfully flashed the v2.1 raphnet hexfile (found [here](https://www.raphnet.net/electronique/gc_to_n64/index_en.php#8)) using the following command:
+To flash the Arduino, you will need [avrdude](https://github.com/avrdudes/avrdude) and the latest gc_2_n64.hex hexfile (see [Releases](https://github.com/pilgrimtabby/gc-2-n64/releases)). I successfully flashed the firmware using this command:
 
 ```
-/path/to/avrdude /path/to/avrdude.conf -v -V -patmega328p -carduino -P/path/to/serial/port -b115200 -U lfuse:w:0xd7:m -U hfuse:w:0xdc:m -U efuse:w:0x01:m -D -Uflash:w:/path/to/hexfile
+/path/to/avrdude /path/to/avrdude.conf -v -V -p atmega328p -c arduino -P /path/to/serial/port -b115200 -D -U flash:w:/path/to/hexfile
 ```
 
 The path to the serial port can be obtained from the [Arduino IDE](https://www.arduino.cc/en/software/).
 
-The -U flags modify the low byte, high byte, and extended byte on the Arduino. I'm honestly not sure if this is necessary, but it's what the [instructions](https://www.raphnet.net/electronique/gc_to_n64/index_en.php#8) say to do.
+For detailed usage of the firmware, see Raphnet's [instructions](https://www.raphnet.net/electronique/gc_to_n64/index_en.php#8). To use the new input display, just connect the Arduino to your PC via the Arduino's USB port. To use the notch calibrator, hold down the start button for 8 seconds to access the menu, then press R, then press A. Leave the control stick at neutral and press A. The LED will blink. Do the same thing for the eight notches, starting with straight up and moving clockwise around the gate. The mapping will be saved between sessions. To clear it, press A in the R menu.
+
+Questions, issues, PRs, etc. more than welcome!

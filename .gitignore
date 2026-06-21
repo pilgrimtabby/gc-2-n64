@@ -1,2 +1,7 @@
-legacy/**
+**/legacy/**
 **/.DS_Store
+**/*.o
+**/*.hex
+**/*.elf
+**/*.bin
+**/*.map
