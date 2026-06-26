@@ -48,6 +48,6 @@ To flash the Arduino, you will need [avrdude](https://github.com/avrdudes/avrdud
 
 The path to the serial port can be obtained from the [Arduino IDE](https://www.arduino.cc/en/software/).
 
-For detailed usage of the firmware, see Raphnet's [instructions](https://www.raphnet.net/electronique/gc_to_n64/index_en.php#8). To use the new input display, just connect the Arduino to your PC via the Arduino's USB port. To use the notch calibrator, hold down the start button for 8 seconds to access the menu, then press R, then press A. Leave the control stick at neutral and press A. The LED will blink. Do the same thing for the eight notches, starting with straight up and moving clockwise around the gate. The mapping will be saved between sessions. To clear it, press A in the R menu.
+For detailed usage of the firmware, see Raphnet's [instructions](https://www.raphnet.net/electronique/gc_to_n64/index_en.php#8). To use the new input display, just connect the Arduino to your PC via the Arduino's USB port. To use the notch calibrator, hold down the start button for 8 seconds to access the menu, then press R, then press Y. Leave the control stick at neutral and press A. The LED will blink. Do the same thing for the eight notches, starting with straight up and moving clockwise around the gate. The mapping will be saved between sessions. To clear it, press A in the R menu.
 
 Questions, issues, PRs, etc. more than welcome!
